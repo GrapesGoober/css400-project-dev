@@ -3,23 +3,23 @@
 	import { linear } from 'svelte/easing'
 
 	const DELTA_TIME = 200
-    let velocity = { x: 50, y: 10 }
+    let velocity = [50, 10]
 
     let puck_coords = tweened(
-		{ x: 100, y: 100 },
+		[50, 50],
 		{ duration: DELTA_TIME, easing: linear }
 	)
 
     setInterval(() => {
-        puck_coords.set({
-			x: $puck_coords.x + velocity.x,
-			y: $puck_coords.y + velocity.y
-		})
+        puck_coords.set([
+			$puck_coords[0] + velocity[0],
+			$puck_coords[1] + velocity[1],
+		])
     }, DELTA_TIME)
 
 </script>
 
-<circle cx={$puck_coords.x} cy={$puck_coords.y} r=10/>
+<circle cx={$puck_coords[0]} cy={$puck_coords[1]} r=10/>
 
 <style>
 	circle {

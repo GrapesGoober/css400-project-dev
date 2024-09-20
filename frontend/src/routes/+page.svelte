@@ -2,12 +2,12 @@
 	import Puck from './puck.svelte';
 	import Mallet from './mallet.svelte';
 
-	let mallet_pos = { x: 50, y: 50 }
+	let mallet_pos = [50, 50]
 
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<svg on:mousemove={(e) => mallet_pos = { x: e.clientX, y: e.clientY }}>
+<svg on:mousemove={(e) => mallet_pos = [e.clientX, e.clientY]}>
 	<Mallet bind:move_to={mallet_pos}/>
 	<Puck/>
 </svg>
