@@ -11,7 +11,7 @@
 <div bind:clientWidth={width} bind:clientHeight={height}>
 	<svg on:mousemove={(e) => mallet_pos = [e.clientX, e.clientY]}>
 		<Mallet bind:move_to={mallet_pos}/>
-		<Puck bind:width={width} bind:height={height}/>
+		<Puck bind:width={width} bind:height={height} bind:mallet_pos={mallet_pos}/>
 	</svg>
 </div>
 
