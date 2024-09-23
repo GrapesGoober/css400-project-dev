@@ -3,6 +3,9 @@
 	import { linear } from 'svelte/easing'
 	import add from 'vectors/add-nd'
 	import dist from 'vectors/dist-nd'
+	import cop from 'vectors/copy-nd'
+	import sub from 'vectors/sub-nd'
+	import div from 'vectors/div-nd'
 
 	export let width, height, mallet_pos
 
@@ -25,9 +28,11 @@
 	$: if (puck_coords[1] < 0 || puck_coords[1] > height) {
 		velocity[1] = -velocity[1]
 	}
-
 	$: if (dist(puck_coords, mallet_pos) < MALLET_RADIUS + PUCK_RADIUS) {
-		velocity = [0, 0]
+		let delta = cop(puck_coords)
+		sub(delta, mallet_pos)
+		div(delta, 10)
+		velocity = cop(delta)
 	}
 </script>
 
