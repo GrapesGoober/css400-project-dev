@@ -16,8 +16,7 @@
 		puck_coords = puck_coords
     }, DELTA_TIME)
 
-	$: if (puck_coords[0] > width) {
-		console.log("hit")
+	$: if (puck_coords[0] > width || puck_coords[0] < 0) {
 		velocity[0] = -velocity[0]
 	}
 	$: if (puck_coords[1] < 0 || puck_coords[1] > height) {
