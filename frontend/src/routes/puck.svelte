@@ -1,6 +1,8 @@
 <script>
     import { tweened } from 'svelte/motion'
 	import { linear } from 'svelte/easing'
+	import add from 'vectors/add-nd'
+	import cop from 'vectors/copy-nd'
 
 	export let width, height
 
@@ -13,10 +15,9 @@
 	)
 
     setInterval(() => {
-        puck_coords.set([
-			$puck_coords[0] + velocity[0],
-			$puck_coords[1] + velocity[1],
-		])
+		let new_coords = cop($puck_coords)
+		add(new_coords, velocity)
+        puck_coords.set(new_coords)
     }, DELTA_TIME)
 
 	// this wall detection isn't reliable due to high DELTA_TIME
