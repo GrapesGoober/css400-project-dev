@@ -1,2 +1,10 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+    let text: String = ""
+    function sendToBackend(): void {
+        console.log(text);
+    }
+</script>
+
+<h1>Skeleton Project</h1>
+<input type="text" bind:value={text}>
+<input type="button" value="enter" on:click={sendToBackend}>
