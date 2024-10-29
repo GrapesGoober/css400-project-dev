@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { Vector } from 'vecti'
 
 	export let width, height, mallet_pos
@@ -7,8 +7,8 @@
 	const MALLET_RADIUS = 20
 	const PUCK_RADIUS = 10
 
-    let velocity = new Vector(5, 1)
-    let puck_coords = new Vector(0, 0)
+    let velocity = new Vector(0, 0)
+    let puck_coords = new Vector(100, 100)
 
     setInterval(() => {
 		puck_coords = puck_coords.add(velocity)
@@ -20,9 +20,19 @@
 	$: if (puck_coords.y < 0 || puck_coords.y > height) {
 		velocity = velocity.hadamard(new Vector(1, -1))
 	}
-	$: if (puck_coords.subtract(mallet_pos).length() < MALLET_RADIUS + PUCK_RADIUS) {
+
+	$: {
 		let delta = puck_coords.subtract(mallet_pos)
-		velocity = delta.divide(5)
+		if (delta.length() < MALLET_RADIUS + PUCK_RADIUS) {
+			// calculate adjustment vector to move puck away from mallet
+			let target_vector = delta
+				.normalize()
+				.multiply(MALLET_RADIUS + PUCK_RADIUS)
+			let move_vector = target_vector.subtract(delta)
+			puck_coords = puck_coords.add(move_vector)
+			// apply velocity
+			velocity = delta.divide(5)
+		}
 	}
 </script>
 
