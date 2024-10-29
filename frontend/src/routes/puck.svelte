@@ -9,7 +9,9 @@
 
     let velocity = new Vector(0, 0)
     let puck_coords = new Vector(100, 100)
+	export let mallet_velocity = new Vector(0, 0)
 
+	// use requestAnimationFrame function would be good
     setInterval(() => {
 		puck_coords = puck_coords.add(velocity)
     }, DELTA_TIME)
@@ -22,16 +24,17 @@
 	}
 
 	$: {
-		let delta = puck_coords.subtract(mallet_pos)
-		if (delta.length() < MALLET_RADIUS + PUCK_RADIUS) {
+		let delta_pos: Vector = puck_coords.subtract(mallet_pos)
+		if (delta_pos.length() < MALLET_RADIUS + PUCK_RADIUS) {
 			// calculate adjustment vector to move puck away from mallet
-			let target_vector = delta
+			let target_vector = delta_pos
 				.normalize()
 				.multiply(MALLET_RADIUS + PUCK_RADIUS)
-			let move_vector = target_vector.subtract(delta)
+			let move_vector = target_vector.subtract(delta_pos)
 			puck_coords = puck_coords.add(move_vector)
 			// apply velocity
-			velocity = delta.divide(5)
+			let delta_v = mallet_velocity.subtract(velocity)
+			velocity = velocity.add(delta_v)
 		}
 	}
 </script>
