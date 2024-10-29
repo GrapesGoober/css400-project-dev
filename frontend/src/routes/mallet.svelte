@@ -1,9 +1,10 @@
 <script>
     import { tweened } from 'svelte/motion'
 	import { cubicOut } from 'svelte/easing'
+	import { Vector } from 'vecti'
 
     export let coords = tweened(
-		[50, 50],
+		new Vector(0, 0),
 		{ duration: 200, easing: cubicOut }
 	)
 
@@ -12,7 +13,7 @@
 
 </script>
 
-<circle cx={$coords[0]} cy={$coords[1]} r=20/>
+<circle cx={$coords.x} cy={$coords.y} r=20/>
 
 <style>
 	circle {
