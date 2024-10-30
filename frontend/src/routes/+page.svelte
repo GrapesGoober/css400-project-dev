@@ -41,7 +41,9 @@
 <!-- I believe there's a bind hell going on here... Svelte store? -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div bind:clientWidth={width} bind:clientHeight={height}>
-	<svg on:mousemove={(e) => mousePos = new Vector(e.clientX, e.clientY)}>
+	<svg 
+	on:mousemove={(e) => mousePos = new Vector(e.clientX, e.clientY)}
+	on:touchmove={(e) => mousePos = new Vector(e.touches[0].screenX, e.touches[0].clientY)}>
 		<circle cx={mallet.position.x} cy={mallet.position.y} r={mallet.radius}/>
 		<circle cx={puck.position.x} cy={puck.position.y} r={puck.radius}/>
 	</svg>
