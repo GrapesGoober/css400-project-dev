@@ -46,14 +46,19 @@ export class Puck extends Circle {
     // detect that it collides with wall,
     // and adjust its position and velocity accordingly
     resolve_wall_collision(width: number, height: number) {
-        // FIXME: Wall Collision Position Bug 
-        // - When puck moves into a wall, it flips its velocity vector
-        // - But if moved too far in, it gets stuck it it
-        if (this.position.x > width || this.position.x < 0) {
-            this.velocity = this.velocity.hadamard(new Vector(-1, 1))
+        let borderLimit = new Vector(width - this.radius, height - this.radius);
+
+        if (this.position.x > borderLimit.x || this.position.x < this.radius) {
+            this.velocity = this.velocity.hadamard(new Vector(-1, 1));
         }
-        if (this.position.y < 0 || this.position.y > height) {
-            this.velocity = this.velocity.hadamard(new Vector(1, -1))
+        if (this.position.y > borderLimit.y || this.position.y < this.radius) {
+            this.velocity = this.velocity.hadamard(new Vector(1, -1));
         }
+        
+        // clamp position
+        this.position = new Vector(
+            Math.min(Math.max(this.radius, this.position.x), width - this.radius),
+            Math.min(Math.max(this.radius, this.position.y), height - this.radius)
+        );
     }
 }
