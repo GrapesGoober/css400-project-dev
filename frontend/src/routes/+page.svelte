@@ -43,7 +43,7 @@
 <div bind:clientWidth={width} bind:clientHeight={height}>
 	<svg 
 	on:mousemove={(e) => mousePos = new Vector(e.clientX, e.clientY)}
-	on:touchmove={(e) => mousePos = new Vector(e.touches[0].screenX, e.touches[0].clientY)}>
+	on:touchmove={(e) => mousePos = new Vector(e.touches[0].clientX, e.touches[0].clientY)}>
 		<circle cx={mallet.position.x} cy={mallet.position.y} r={mallet.radius}/>
 		<circle cx={puck.position.x} cy={puck.position.y} r={puck.radius}/>
 	</svg>
