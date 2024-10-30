@@ -15,6 +15,7 @@ export class Circle {
 }
 
 export class Mallet extends Circle {
+    radius: number = 25;
     // accellerate to a new position with adjustable delta_v coef
     // higher the COEF, faster the mallet react to mouse
     accelerate_towards(to: Vector) {
