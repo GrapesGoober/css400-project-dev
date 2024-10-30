@@ -37,13 +37,9 @@ export class Puck extends Circle {
                 .subtract(delta_pos);
 			this.position = this.position.add(adj);
 			// calculate delta velocity to apply 
-            // FIXME: Post-collision velocity bug
-            // - the collision resolution is not realistic
-            // - has a "sticky" feel since it's just updating its velocity
-			let delta_v = other.velocity
-                .subtract(this.velocity)
-                .multiply(0.5);
-			this.velocity = this.velocity.add(delta_v)
+			let delta_v = other.velocity.subtract(this.velocity);
+            let force = normal.multiply( delta_v.dot(normal) );
+			this.velocity = this.velocity.add(force)
 		}
     }
 
