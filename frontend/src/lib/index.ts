@@ -18,7 +18,7 @@ export class Mallet extends Circle {
     // accellerate to a new position with adjustable delta_v coef
     // higher the COEF, faster the mallet react to mouse
     accelerate_towards(to: Vector) {
-        const COEF = 3;
+        const COEF = 6;
         let delta_v: Vector = to.subtract(this.position);
         this.velocity = delta_v.multiply(COEF);
     }
