@@ -37,12 +37,46 @@ export class Mallet extends Circle {
     radius: number = 25;
     // accellerate to a new position with adjustable delta_v coef
     // higher the COEF, faster the mallet react to mouse
+
+    restricted_update_position(dt: number, width: number, height: number) {
+        this.position = this.velocity.multiply(dt).add(this.position);
+
+        // Restrict to the left side of the table
+        this.position.x = Math.min(this.position.x, width / 2 - this.radius);
+        this.position.y = Math.max(this.radius, Math.min(this.position.y, height - this.radius));
+    }
     accelerate_towards(to: Vector) {
         const COEF = 6;
         let delta_v: Vector = to.subtract(this.position);
         this.velocity = delta_v.multiply(COEF);
     }
+
+    
 }
+
+//Bot
+export class OpponentMallet extends Circle {
+    radius: number = 25;
+    speed: number = 500; 
+
+    moveTowards(target: Vector) {
+        const direction = target.subtract(this.position);
+        if (direction.length() > 1) {
+            this.velocity = direction.normalize().multiply(this.speed);
+        } else {
+            this.velocity = new Vector(0, 0);
+        }
+    }
+
+    restricted_update_position(dt: number, width: number, height: number) {
+        this.position = this.velocity.multiply(dt).add(this.position);
+
+        // Restrict to the right side of the table
+        this.position.x = Math.max(this.position.x, width / 2 + this.radius);
+        this.position.y = Math.max(this.radius, Math.min(this.position.y, height - this.radius));
+    }
+}
+
 
 export class Puck extends Circle {
     // detect that it collides with mallet,
