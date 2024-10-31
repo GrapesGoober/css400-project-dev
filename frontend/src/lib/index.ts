@@ -1,6 +1,20 @@
 // place files you want to import through the `$lib` alias in this folder.
 import { Vector } from 'vecti';
 
+export async function postApiText(text: string): Promise<string> {
+    const res = await fetch("/api/ping", {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({text: text})
+    })
+    
+    const json = await res.json();
+    return JSON.stringify(json);
+}
+
 export class Circle {
     position: Vector = new Vector(0, 0);
     velocity: Vector = new Vector(0, 0);
