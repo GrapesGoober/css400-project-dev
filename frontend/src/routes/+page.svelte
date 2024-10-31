@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Mallet, Puck } from '$lib';
+    import { Mallet, postGameState, Puck } from '$lib';
     import { onMount } from 'svelte';
 	import { Vector } from 'vecti'
 	
@@ -34,6 +34,12 @@
 
 	onMount(() => {
 		requestAnimationFrame(update);
+		
+		// send gameplay record
+		const INTERVAL = 100;
+		setInterval(() => {
+			postGameState(mallet, puck);
+		}, INTERVAL);
 	});
 
 </script>
