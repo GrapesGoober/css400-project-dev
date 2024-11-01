@@ -10,7 +10,6 @@
 	let puck = new Puck();
 	let opponentMallet = new OpponentMallet();
 	puck.position = new Vector(100,100);
-	opponentMallet.position = new Vector(width - 50, height / 2);
 
 	let prev_timestamp: number = 0
 	function update(timestamp: number) {
@@ -19,20 +18,20 @@
 		prev_timestamp = timestamp;
 
 		// control mallet
-		mallet.accelerate_towards(mousePos);
+		mallet.acceleratTowards(mousePos);
 
 		// Move opponent mallet towards puck position
         opponentMallet.moveTowards(puck.position);
 
 		// have puck check collision
-		puck.resolve_wall_collision(width, height);
-		puck.resolve_mallet_collision(mallet);
-		puck.resolve_mallet_collision(opponentMallet);
+		puck.resolveWallCollision(width, height);
+		puck.resolveMalletCollision(mallet);
+		puck.resolveMalletCollision(opponentMallet);
 
 		// update their positions
-		 mallet.restricted_update_position(dt, width, height);
-		puck.update_position(dt);
-		opponentMallet.restricted_update_position(dt, width, height);
+		 mallet.restrictedUpdatePosition(dt, width, height);
+		puck.updatePosition(dt);
+		opponentMallet.restrictedUpdatePosition(dt, width, height);
 		
 		// force svelte to recognize changes
 		mallet = mallet;
