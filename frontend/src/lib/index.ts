@@ -13,6 +13,10 @@ export async function postGameState(mallet: Mallet, puck: Puck): Promise<string>
             puck_y: puck.position.y,
             puck_vx: puck.velocity.x,
             puck_vy: puck.velocity.y,
+            mallet_x: mallet.position.x,
+            mallet_y: mallet.position.y,
+            mallet_vx: mallet.velocity.x,
+            mallet_vy: mallet.velocity.y
         })
     })
     

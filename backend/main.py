@@ -9,6 +9,10 @@ class GamestateRecord(BaseModel):
     puck_y: float
     puck_vx: float
     puck_vy: float
+    mallet_x: float 
+    mallet_y : float
+    mallet_vx : float
+    mallet_vy : float
 
 @app.post("/api/record/")
 async def record(record: GamestateRecord):
