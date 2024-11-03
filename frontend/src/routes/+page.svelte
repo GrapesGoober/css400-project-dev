@@ -17,21 +17,31 @@
 		let dt: number = (timestamp - prev_timestamp) / 1000;
 		prev_timestamp = timestamp;
 
-		// control mallet
-		mallet.acceleratTowards(mousePos);
-
-		// Move opponent mallet towards puck position
+		// control mallets
+		mallet.accelerateTowards(mousePos);
         opponentMallet.moveTowards(puck.position);
 
+		// update their positions & restrict
+		mallet.updatePosition(dt);
+		puck.updatePosition(dt);
+		opponentMallet.updatePosition(dt);
+
+		// restrict mallet position within bounds 
+		// NOTE: must restrict before checking puck collision
+		// since we need to recompute velocity vector
+		mallet.restrictBounds(
+			new Vector(0, 0),
+			new Vector(width / 2, height),
+		);
+		opponentMallet.restrictBounds(
+			new Vector(width / 2, 0),
+			new Vector(width, height),
+		);
+		
 		// have puck check collision
 		puck.resolveWallCollision(width, height);
 		puck.resolveMalletCollision(mallet);
 		puck.resolveMalletCollision(opponentMallet);
-
-		// update their positions
-		 mallet.restrictedUpdatePosition(dt, width, height);
-		puck.updatePosition(dt);
-		opponentMallet.restrictedUpdatePosition(dt, width, height);
 		
 		// force svelte to recognize changes
 		mallet = mallet;

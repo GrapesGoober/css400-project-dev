@@ -37,28 +37,35 @@ export class Mallet extends Circle {
     radius: number = 25;
     // accellerate to a new position with adjustable delta_v coef
     // higher the COEF, faster the mallet react to mouse
-
-    restrictedUpdatePosition(dt: number, width: number, height: number) {
-        this.position = this.velocity.multiply(dt).add(this.position);
-
-        // Restrict to the left side of the table
-        this.position = new Vector(
-            Math.min(this.position.x, width / 2 - this.radius),
-            Math.max(this.radius, Math.min(this.position.y, height - this.radius))
-        );
-    }
-    acceleratTowards(to: Vector) {
+    accelerateTowards(to: Vector) {
         const COEF = 6;
         let deltaV: Vector = to.subtract(this.position);
         this.velocity = deltaV.multiply(COEF);
     }
+    // restrict mallet position within bounds by clamping position and resetting velocity
+    restrictBounds(min: Vector, max: Vector) {
+
+        min = min.add(new Vector(this.radius, this.radius));
+        max = max.subtract(new Vector(this.radius, this.radius));
+
+        if (this.position.x > max.x || this.position.x < min.x) {
+            this.velocity = this.velocity.hadamard(new Vector(0, 1));
+        }
+        if (this.position.y > max.y || this.position.y < min.y) {
+            this.velocity = this.velocity.hadamard(new Vector(1, 0));
+        }
+
+        this.position = new Vector(
+            Math.min(Math.max(min.x, this.position.x), max.x),
+            Math.min(Math.max(min.y, this.position.y), max.y),
+        );
+    }
 }
 
 //Bot
-export class OpponentMallet extends Circle {
-    radius: number = 25;
+export class OpponentMallet extends Mallet {
     speed: number = 500; 
-
+    // move towards a target with a constant speed
     moveTowards(target: Vector) {
         const direction = target.subtract(this.position);
         if (direction.length() > 1) {
@@ -66,16 +73,6 @@ export class OpponentMallet extends Circle {
         } else {
             this.velocity = new Vector(0, 0);
         }
-    }
-
-    restrictedUpdatePosition(dt: number, width: number, height: number) {
-        this.position = this.velocity.multiply(dt).add(this.position);
-
-        // Restrict to the right side of the table
-        this.position = new Vector(
-            Math.max(this.position.x, width / 2 + this.radius), 
-            Math.max(this.radius, Math.min(this.position.y, height - this.radius))
-        );
     }
 }
 
