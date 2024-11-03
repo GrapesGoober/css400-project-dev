@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Mallet, postGameState, Puck } from '$lib';
+    import { Mallet,OpponentMallet, postGameState, Puck } from '$lib';
     import { onMount } from 'svelte';
 	import { Vector } from 'vecti'
 	
@@ -8,6 +8,7 @@
 
 	let mallet = new Mallet();
 	let puck = new Puck();
+	let opponentMallet = new OpponentMallet();
 	puck.position = new Vector(100,100);
 
 	let prev_timestamp: number = 0
@@ -16,24 +17,43 @@
 		let dt: number = (timestamp - prev_timestamp) / 1000;
 		prev_timestamp = timestamp;
 
-		// control mallet
-		mallet.accelerate_towards(mousePos);
+		// control mallets
+		mallet.accelerateTowards(mousePos);
+        opponentMallet.moveTowards(puck.position);
 
+		// update their positions & restrict
+		mallet.updatePosition(dt);
+		puck.updatePosition(dt);
+		opponentMallet.updatePosition(dt);
+
+		// restrict mallet position within bounds 
+		// NOTE: must restrict before checking puck collision
+		// since we need to recompute velocity vector
+		mallet.restrictBounds(
+			new Vector(0, 0),
+			new Vector(width / 2, height),
+		);
+		opponentMallet.restrictBounds(
+			new Vector(width / 2, 0),
+			new Vector(width, height),
+		);
+		
 		// have puck check collision
-		puck.resolve_wall_collision(width, height);
-		puck.resolve_mallet_collision(mallet);
-
-		// update their positions
-		mallet.update_position(dt);
-		puck.update_position(dt);
+		puck.resolveWallCollision(width, height);
+		puck.resolveMalletCollision(mallet);
+		puck.resolveMalletCollision(opponentMallet);
 		
 		// force svelte to recognize changes
 		mallet = mallet;
 		puck = puck;
+		opponentMallet = opponentMallet;
 	}
 
 	onMount(() => {
+		console.log("Width:", width, "Height:", height);
+		opponentMallet.position = new Vector(width - 50, height / 2); 
 		requestAnimationFrame(update);
+		
 		
 		// send gameplay record
 		const INTERVAL = 100;
@@ -51,7 +71,9 @@
 	on:mousemove={(e) => mousePos = new Vector(e.clientX, e.clientY)}
 	on:touchmove={(e) => mousePos = new Vector(e.touches[0].clientX, e.touches[0].clientY)}>
 		<circle cx={mallet.position.x} cy={mallet.position.y} r={mallet.radius}/>
-		<circle cx={puck.position.x} cy={puck.position.y} r={puck.radius}/>
+		<circle cx={puck.position.x} cy={puck.position.y} r={puck.radius} fill="green" />
+		<circle cx={opponentMallet.position.x} cy={opponentMallet.position.y} r={opponentMallet.radius} fill="blue" />
+		<rect x={width / 2 - 2.5} y="0" width="5" height={height} fill="grey" />
 	</svg>
 </div>
 
@@ -59,6 +81,12 @@
 	circle {
 		fill: #ff3e00;
 	}
+	circle[fill="blue"] {
+        fill: blue;
+    }
+	circle[fill="green"] {
+        fill: green;
+    }
 	svg {
 		width: 100%;
 		height: 100%;
