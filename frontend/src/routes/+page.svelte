@@ -18,11 +18,11 @@
 		prev_timestamp = timestamp;
 
 		// control mallets
-		mallet.accelerateTowards(mousePos);
+		mallet.setPositionTo(mousePos);
         opponentMallet.moveTowards(puck.position);
 
 		// update their positions & restrict
-		mallet.updatePosition(dt);
+		// mallet.updatePosition(dt); // let the mouse update position
 		puck.updatePosition(dt);
 		opponentMallet.updatePosition(dt);
 

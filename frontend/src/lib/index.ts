@@ -41,10 +41,11 @@ export class Mallet extends Circle {
     radius: number = 25;
     // accellerate to a new position with adjustable delta_v coef
     // higher the COEF, faster the mallet react to mouse
-    accelerateTowards(to: Vector) {
-        const COEF = 6;
+    setPositionTo(to: Vector) {
+        const COEF = 100;
         let deltaV: Vector = to.subtract(this.position);
         this.velocity = deltaV.multiply(COEF);
+        this.position = to;
     }
     // restrict mallet position within bounds by clamping position and resetting velocity
     restrictBounds(min: Vector, max: Vector) {
