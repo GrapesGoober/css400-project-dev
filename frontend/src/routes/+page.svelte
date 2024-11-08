@@ -18,7 +18,6 @@
 		prev_timestamp = timestamp;
 
 		// control mallets
-		mallet.accelerateTowards(mousePos);
         opponentMallet.moveTowards(puck.position);
 
 		// update their positions & restrict
@@ -50,6 +49,14 @@
 	}
 
 	onMount(() => {
+		mallet.position = new Vector(
+			500, 500
+		);
+
+		puck.position = new Vector(
+			Math.random() * width,
+			Math.random() * height
+		);
 		console.log("Width:", width, "Height:", height);
 		opponentMallet.position = new Vector(width - 50, height / 2); 
 		requestAnimationFrame(update);
@@ -58,6 +65,7 @@
 		// send gameplay record
 		const INTERVAL = 100;
 		setInterval(() => {
+			mallet.predictedAccelerateTowards(puck);
 			postGameState(mallet, puck);
 		}, INTERVAL);
 	});

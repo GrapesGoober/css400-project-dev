@@ -64,6 +64,31 @@ export class Mallet extends Circle {
             Math.min(Math.max(min.y, this.position.y), max.y),
         );
     }
+
+    async predictedAccelerateTowards(puck: Puck) {
+        const res = await fetch("/api/predict", {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                puck_x: puck.position.x,
+                puck_y: puck.position.y,
+                puck_vx: puck.velocity.x,
+                puck_vy: puck.velocity.y,
+                mallet_x: this.position.x,
+                mallet_y: this.position.y,
+            })
+        })
+        
+        const json = await res.json();
+        console.log(json);
+        this.velocity = new Vector(
+            json["mallet_vx"],
+            json["mallet_vy"],
+        );
+    }
 }
 
 //Bot
