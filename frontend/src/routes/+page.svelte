@@ -38,6 +38,9 @@
 			new Vector(width, height),
 		);
 		
+		// CSS400-24 puck should reset when collided right wall
+		puck.resetOnRightWallCollide(width, height);
+
 		// have puck check collision
 		puck.resolveWallCollision(width, height);
 		puck.resolveMalletCollision(mallet);

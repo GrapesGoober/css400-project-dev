@@ -118,4 +118,19 @@ export class Puck extends Circle {
             Math.min(Math.max(this.radius, this.position.y), height - this.radius)
         );
     }
+
+    // CSS400-24 pinic's request
+    resetOnRightWallCollide(width: number, height: number) {
+        let borderLimit = new Vector(width - this.radius, height - this.radius);
+
+        if (this.position.x > borderLimit.x) {
+            this.velocity = new Vector(0, 0);
+            // reset position within boundary
+            // this logic is determined by picnic's request
+            this.position = new Vector(
+                30 + Math.random() * width / 2,
+                20 + Math.random() * (height - 20)
+            );
+        }
+    }
 }
