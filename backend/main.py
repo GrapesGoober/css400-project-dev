@@ -40,7 +40,8 @@ with open("./backend/scaler_y.sav", "rb") as f:
     scaler_y = pickle.load(f)
 
 with open("./backend/trained_mallet_model_new.sav", "rb") as f:
-    model = pickle.load(f)
+# with open("./backend/trained_mallet_model_pucknotreset.sav", "rb") as f:
+    model = pickle.load(f) 
     
 @app.post("/api/predict/")
 async def record(features: Features):
