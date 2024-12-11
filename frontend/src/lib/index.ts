@@ -1,7 +1,7 @@
 // place files you want to import through the `$lib` alias in this folder.
 import { Vector } from 'vecti';
 
-export async function postGameState(mallet: Mallet, puck: Puck): Promise<string> {
+export async function postGameState(mallet: Mallet, puck: Puck, malletOpponent: OpponentMallet): Promise<string> {
     const res = await fetch("/api/record", {
         headers: {
             'Accept': 'application/json',
@@ -16,7 +16,12 @@ export async function postGameState(mallet: Mallet, puck: Puck): Promise<string>
             mallet_x: mallet.position.x,
             mallet_y: mallet.position.y,
             mallet_vx: mallet.velocity.x,
-            mallet_vy: mallet.velocity.y
+            mallet_vy: mallet.velocity.y,
+
+            mallet_opponent_x: malletOpponent.position.x,
+            mallet_opponent_y : malletOpponent.position.y,
+            mallet_opponent_vx : malletOpponent.velocity.x,
+            mallet_opponent_vy : malletOpponent.velocity.y
         })
     })
     
@@ -68,7 +73,7 @@ export class Mallet extends Circle {
 
 //Bot
 export class OpponentMallet extends Mallet {
-    speed: number = 500; 
+    speed: number = 1000; 
     // move towards a target with a constant speed
     moveTowards(target: Vector) {
         const direction = target.subtract(this.position);
@@ -120,17 +125,17 @@ export class Puck extends Circle {
     }
 
     // CSS400-24 pinic's request
-    resetOnRightWallCollide(width: number, height: number) {
-        let borderLimit = new Vector(width - this.radius, height - this.radius);
+    // resetOnRightWallCollide(width: number, height: number) {
+    //     let borderLimit = new Vector(width - this.radius, height - this.radius);
 
-        if (this.position.x > borderLimit.x) {
-            this.velocity = new Vector(0, 0);
-            // reset position within boundary
-            // this logic is determined by picnic's request
-            this.position = new Vector(
-                30 + Math.random() * width / 2,
-                20 + Math.random() * (height - 20)
-            );
-        }
-    }
+    //     if (this.position.x > borderLimit.x) {
+    //         this.velocity = new Vector(0, 0);
+    //         // reset position within boundary
+    //         // this logic is determined by picnic's request
+    //         this.position = new Vector(
+    //             30 + Math.random() * width / 2,
+    //             20 + Math.random() * (height - 20)
+    //         );
+    //     }
+    // }
 }
