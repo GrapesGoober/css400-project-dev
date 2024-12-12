@@ -1,7 +1,10 @@
 import csv
 import pickle
+import gzip
 from fastapi import FastAPI
 from pydantic import BaseModel
+
+from runtime_feature_engineer import runtime_feature_engineer
 
 app = FastAPI()
 
@@ -33,19 +36,19 @@ class Prediction(BaseModel):
     mallet_vx : float
     mallet_vy : float
 
-with open("./backend/scaler_x.sav", "rb") as f:
+with gzip.open("./backend/scaler_x.sav", "rb") as f:
     scaler_x = pickle.load(f)
 
-with open("./backend/scaler_y.sav", "rb") as f:
+with gzip.open("./backend/scaler_y.sav", "rb") as f:
     scaler_y = pickle.load(f)
 
-with open("./backend/trained_mallet_model_new.sav", "rb") as f:
-# with open("./backend/trained_mallet_model_pucknotreset.sav", "rb") as f:
+with gzip.open("./backend/model.sav", "rb") as f:
     model = pickle.load(f) 
     
 @app.post("/api/predict/")
 async def record(features: Features):
-    scaled_features = scaler_x.transform([list(features.model_dump().values())])
+    features_dict = runtime_feature_engineer(features.model_dump())
+    scaled_features = scaler_x.transform([list(features_dict.values())])
     predict = scaler_y.inverse_transform(model.predict(scaled_features))
     return Prediction(mallet_vx=predict[0][0], mallet_vy=predict[0][1])
         
