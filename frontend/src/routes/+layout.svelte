@@ -1,6 +1,12 @@
-<!-- src/routes/+layout.svelte -->
 <script>
-  import Home from '/src/home/home.svelte';
+  // This is the root layout
 </script>
 
-<Home />
+<nav>
+  <a href="/home">Home</a>
+  <a href="/gameplay">Gameplay</a>
+</nav>
+
+<main>
+  <slot /> <!-- This is where the current page content will be rendered -->
+</main>

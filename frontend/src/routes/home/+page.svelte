@@ -10,7 +10,6 @@
     <p>Whether you're practicing solo or testing your skills, you’ll face a dynamic, challenging opponent that learns from gameplay data to provide realistic, varied interactions.</p>
     <p>By focusing on a streamlined game environment, we’ve crafted a responsive and intuitive web app that captures all the essentials of air hockey—precise controls, fast-paced action, and engaging AI competition.</p>
     <p class="Outro">Join the game, and experience the thrill of playing against an AI that’s as close to human as it gets!</p>
-    <button><a href="/page">Start Game</a></button>
   </div>
 </main>
 
